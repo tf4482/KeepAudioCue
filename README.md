@@ -19,6 +19,10 @@ leaves it running in the background.
   from the addon compartment menu.
 - **Chat commands** - every option can also be changed by slash command.
 
+## Screenshots
+
+![Settings page](docs/settings.png)
+
 ## Install
 
 1. Download `KeepAudioCue-vX.Y.Z.zip` from the
