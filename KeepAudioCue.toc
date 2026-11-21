@@ -1,0 +1,13 @@
+## Interface: 16001
+## Title: KeepAudioCue
+## Notes: Hides the Cooldown Manager windows while their sound alerts keep playing
+## Author: tf4482
+## Version: @project-version@
+## IconTexture: Interface/Icons/Ability_Warrior_BattleShout
+## SavedVariables: KeepAudioCueDB
+
+Output.lua
+Store.lua
+Settings.lua
+Slash.lua
+KeepAudioCue.lua
