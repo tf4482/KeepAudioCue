@@ -1,5 +1,5 @@
 # BigWigs packager settings
-package-as: CHANGE_ME
+package-as: KeepAudioCue
 
 manual-changelog:
   filename: CHANGELOG.md
