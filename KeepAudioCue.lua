@@ -34,7 +34,7 @@ end
 -- hide or restore one viewer; Edit Mode always shows it for positioning
 local function Apply(v)
   local viewer = v.viewer
-  if ns.db[v.key] and not (viewer.IsEditing and viewer:IsEditing()) then
+  if ns.Get(v.key) and not (viewer.IsEditing and viewer:IsEditing()) then
     if not hidden[v] then
       hidden[v] = true
       v.alpha = viewer:GetAlpha()
@@ -77,7 +77,7 @@ end
 
 -- one status line for a viewer, with a hint when its alerts stay silent
 local function Line(v)
-  local state = ns.db[v.key] and ns.Color("success", "hidden") or ns.Color("muted", "shown")
+  local state = ns.Get(v.key) and ns.Color("success", "hidden") or ns.Color("muted", "shown")
   local hint = ""
   if not v.viewer then
     hint = ns.Color("warning", " (viewer not found)")
@@ -100,7 +100,7 @@ end
 -- warn about viewers the user hides here whose alerts Blizzard still silences
 local function Warn()
   for _, v in ipairs(VIEWERS) do
-    local problem = ns.db[v.key] and v.viewer and Problem(v)
+    local problem = ns.Get(v.key) and v.viewer and Problem(v)
     if problem then
       ns.Warn(v.label .. ": alerts silent - " .. problem)
       ns.Detail("set Edit Mode visibility to " .. ns.Color("value", "Always")
