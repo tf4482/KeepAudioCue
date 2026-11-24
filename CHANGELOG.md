@@ -6,6 +6,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 
 ## [Unreleased]
 
+### Added
+
+- "Per character" checkbox and `/kac character on|off` to save the settings per character.
+- `/kac test`, `/kac reset`, and `/kac debug on|off` commands.
+
+### Changed
+
+- Updated shared components; saved account settings stay as they are.
+
 ### Fixed
 
 - Skip Cooldown Manager hooks and fields this client lacks instead of failing during setup.
