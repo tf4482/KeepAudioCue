@@ -38,11 +38,13 @@ local function Apply(v)
     if not hidden[v] then
       hidden[v] = true
       v.alpha = viewer:GetAlpha()
+      ns.Debug("hiding " .. v.label)
     end
     viewer:SetAlpha(0)
     SetTooltips(viewer, false)
   elseif hidden[v] then
     hidden[v] = nil
+    ns.Debug("restoring " .. v.label)
     viewer:SetAlpha(v.alpha)
     SetTooltips(viewer, viewer.tooltipsShown ~= false)
   end
@@ -95,6 +97,7 @@ local function Status()
   for _, v in ipairs(VIEWERS) do
     Line(v)
   end
+  ns.Status("per character", ns.OnOff(ns.char.perCharacter))
 end
 
 -- warn about viewers the user hides here whose alerts Blizzard still silences
@@ -168,18 +171,31 @@ local function Setup()
   Refresh()
 end
 
+-- apply every window and report alert problems now, for checking in game
+local function Test()
+  if not setup then
+    ns.Warn("Cooldown Manager not loaded yet")
+    return
+  end
+  Refresh()
+  Status()
+  Warn()
+end
+
 -- event handlers by event name
 local events = {}
 
 -- Blizzard cooldown viewer loaded after this addon
 function events.ADDON_LOADED(name)
   if name == "Blizzard_CooldownViewer" then
+    ns.Debug("Blizzard_CooldownViewer loaded")
     Setup()
   end
 end
 
 -- layouts loaded or saved: check visibility settings
 function events.EDIT_MODE_LAYOUTS_UPDATED()
+  ns.Debug("EDIT_MODE_LAYOUTS_UPDATED fired")
   if setup then
     WarnSoon()
   end
@@ -188,7 +204,8 @@ end
 -- one frame dispatching all events above
 local frame = CreateFrame("Frame")
 for event in pairs(events) do
-  frame:RegisterEvent(event)
+  -- skip events this client does not know
+  if C_EventUtils.IsEventValid(event) then frame:RegisterEvent(event) end
 end
 frame:SetScript("OnEvent", function(_, event, ...)
   events[event](...)
@@ -220,5 +237,33 @@ for _, v in ipairs(VIEWERS) do
     end,
   })
 end
+ns.Command({
+  name = "character",
+  help = "use settings for this character only, or the account's",
+  args = { { name = "state", choices = { "on", "off" } } },
+  run = function(args)
+    ns.Set("perCharacter", args.state == "on")
+    Status()
+  end,
+})
+ns.Command({ name = "test", help = "apply the windows and check their alerts now", run = Test })
+ns.Command({
+  name = "reset",
+  help = "reset the active profile's settings to defaults",
+  run = function()
+    ns.ResetSettings()
+    ns.Success("settings reset to defaults")
+    Status()
+  end,
+})
+ns.Command({
+  name = "debug",
+  help = "show what the addon does in chat, until /reload",
+  args = { { name = "state", choices = { "on", "off" } } },
+  run = function(args)
+    ns.debug = args.state == "on"
+    ns.Status("debug", ns.OnOff(ns.debug))
+  end,
+})
 ns.Command({ name = "config", help = "open the settings page", run = ns.OpenSettings })
 ns.Slash({ "/kac", "/keepaudiocue" }, Status)
