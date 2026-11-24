@@ -1,5 +1,5 @@
 # BigWigs packager settings
-package-as: KeepAudioCue
+package-as: CHANGE_ME
 
 manual-changelog:
   filename: CHANGELOG.md
@@ -9,3 +9,6 @@ ignore:
   - README.md
   - CHANGELOG.md
   - docs
+  - icon
+  - VERSION
+  - deploy.bat
