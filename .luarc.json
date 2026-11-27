@@ -20,6 +20,7 @@
     "IsInRaid",
     "MinimalSliderWithSteppersMixin",
     "Settings",
+    "SettingsDropdownControlMixin",
     "C_CVar",
     "C_Timer",
     "EssentialCooldownViewer",
